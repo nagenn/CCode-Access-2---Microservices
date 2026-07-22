@@ -1,0 +1,60 @@
+<div class="result-section">
+  <div class="result-title">Risk Assessment</div>
+  <div class="result-risk" [class]="riskClass()">{{ response().risk_level }} Risk</div>
+</div>
+
+<div class="result-section">
+  <div class="result-title">Missing Clauses</div>
+  <div class="tag-list">
+    @if (missingClauses().length === 0) {
+      <span class="all-clear">✓ All required clauses present</span>
+    } @else {
+      @for (item of missingClauses(); track item.description) {
+        <span class="tag missing">{{ item.description }}</span>
+      }
+    }
+  </div>
+</div>
+
+<div class="result-section">
+  <div class="result-title">Problematic Terms</div>
+  <div class="tag-list">
+    @if (problematicTerms().length === 0) {
+      <span class="all-clear">✓ No prohibited terms found</span>
+    } @else {
+      @for (item of problematicTerms(); track item.description) {
+        <span class="tag problem">{{ item.description }}</span>
+      }
+    }
+  </div>
+</div>
+
+<div class="result-section">
+  <div class="result-title">Key Obligations</div>
+  @if (response().key_obligations.length === 0) {
+    <span class="dim-text">None extracted</span>
+  } @else {
+    <ul class="obligations-list">
+      @for (o of response().key_obligations; track o) {
+        <li>{{ o }}</li>
+      }
+    </ul>
+  }
+</div>
+
+@if (response().recommendations) {
+  <div class="result-section">
+    <div class="result-title">Recommendations</div>
+    <div class="recommendation-box">{{ response().recommendations }}</div>
+  </div>
+}
+
+<div class="confidence-row">
+  <span class="confidence-label">Confidence</span>
+  <div class="confidence-bar"><div class="confidence-fill" [style.width.%]="confidencePct()"></div></div>
+  <span class="confidence-value">{{ confidencePct() }}%</span>
+</div>
+
+@if (response().risk_level === 'High') {
+  <div class="escalation-notice">⚠ This contract has been escalated for legal review. Human sign-off required before proceeding.</div>
+}

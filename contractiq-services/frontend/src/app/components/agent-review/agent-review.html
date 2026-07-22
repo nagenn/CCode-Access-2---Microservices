@@ -1,0 +1,38 @@
+<div class="form-section-title">AI Agent Analysis</div>
+<p class="intro-text">
+  The agent reads the contract via Ingestion Service, fetches compliance rules via Rules Service,
+  and returns a structured risk judgment. Every hop is traced below.
+</p>
+
+<app-trace-diagram
+  [trace]="response()?.trace ?? null"
+  [inFlight]="state() === 'loading'"
+  (revealed)="onTraceRevealed()"
+/>
+
+@if (errorMessage()) {
+  <div class="inline-error">{{ errorMessage() }}</div>
+}
+
+<div class="btn-row">
+  <button class="btn btn-agent" [disabled]="state() === 'loading' || state() === 'revealing'" (click)="runAgentReview()">
+    @if (state() === 'loading') {
+      <span class="loading-spinner"></span> Agent running...
+    } @else if (state() === 'revealing') {
+      <span class="loading-spinner"></span> Tracing hops...
+    } @else {
+      ▶ Run Agent Review
+    }
+  </button>
+  <button class="btn btn-ghost" (click)="reset()">Reset</button>
+</div>
+
+@if (recordError()) {
+  <div class="inline-error">{{ recordError() }}</div>
+}
+
+@if (state() === 'done' && response()) {
+  <div class="result-wrap">
+    <app-result-panel [response]="response()!" />
+  </div>
+}

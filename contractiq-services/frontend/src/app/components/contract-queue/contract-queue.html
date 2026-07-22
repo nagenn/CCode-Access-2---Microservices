@@ -1,0 +1,67 @@
+<div class="left-panel">
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value total">{{ stats().total }}</div></div>
+    <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value pending">{{ stats().pending }}</div></div>
+    <div class="stat-card"><div class="stat-label">Cleared</div><div class="stat-value cleared">{{ stats().cleared }}</div></div>
+    <div class="stat-card"><div class="stat-label">Escalated</div><div class="stat-value escalated">{{ stats().escalated }}</div></div>
+  </div>
+
+  <div class="panel-header">
+    <div class="panel-title">Contract Queue</div>
+    <div class="panel-header-right">
+      <div class="queue-count">{{ stats().pending }} pending review</div>
+      <button class="btn-reset-all" [disabled]="resetting()" (click)="resetAllContracts()">
+        @if (resetting()) {
+          <span class="loading-spinner"></span> Resetting...
+        } @else {
+          ⟳ Reset All
+        }
+      </button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Contract</th>
+          <th>Status</th>
+          <th>Reviewer</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading()) {
+          <tr><td colspan="3" class="empty-cell">Loading contracts...</td></tr>
+        } @else if (loadError()) {
+          <tr><td colspan="3" class="empty-cell error-cell">{{ loadError() }}</td></tr>
+        } @else if (rows().length === 0) {
+          <tr><td colspan="3" class="empty-cell">No contracts found in Ingestion Service.</td></tr>
+        } @else {
+          @for (row of rows(); track row.filename) {
+            <tr
+              [class.selected]="row.filename === selectedFilename()"
+              (click)="onRowClick(row.filename)"
+            >
+              <td>
+                <div class="contract-name">{{ row.displayName }}</div>
+              </td>
+              <td>
+                <span class="badge" [class]="'badge-' + row.status">{{ row.statusLabel }}</span>
+              </td>
+              <td>
+                @if (row.reviewType) {
+                  <span class="review-type-tag" [class.agent-tag]="row.reviewType === 'agent'">{{ row.reviewType }}</span>
+                  @if (row.reviewer) {
+                    <span class="reviewer-name">{{ row.reviewer }}</span>
+                  }
+                } @else {
+                  <span class="dim">—</span>
+                }
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

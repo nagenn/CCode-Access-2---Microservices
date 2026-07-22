@@ -1,0 +1,61 @@
+<div class="form-section-title">Compliance Checklist</div>
+<div class="checklist">
+  @for (item of checklistItems; track item.key) {
+    <div class="check-item" [class.checked]="isChecked(item.key)">
+      <input
+        type="checkbox"
+        [id]="'chk-' + item.key"
+        [checked]="isChecked(item.key)"
+        (change)="toggle(item.key)"
+      />
+      <label class="check-label" [for]="'chk-' + item.key">{{ item.label }}</label>
+    </div>
+  }
+</div>
+
+<div class="form-section-title">Review Details</div>
+<div class="form-row">
+  <div class="form-group">
+    <label>Reviewer Name</label>
+    <input type="text" placeholder="Your name" [ngModel]="reviewerName()" (ngModelChange)="reviewerName.set($event)" />
+  </div>
+  <div class="form-group">
+    <label>Risk Assessment</label>
+    <select [ngModel]="riskLevel()" (ngModelChange)="riskLevel.set($event)">
+      <option value="">— Select risk level —</option>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select>
+  </div>
+</div>
+<div class="form-group">
+  <label>Notes</label>
+  <textarea placeholder="Add review notes, concerns, or context..." [ngModel]="notes()" (ngModelChange)="notes.set($event)"></textarea>
+</div>
+
+@if (submitError()) {
+  <div class="inline-error">{{ submitError() }}</div>
+}
+
+<div class="btn-row">
+  <button class="btn btn-primary" [disabled]="submitting()" (click)="submit()">
+    @if (submitting()) {
+      <span class="loading-spinner"></span> Submitting...
+    } @else {
+      Submit Review
+    }
+  </button>
+  <button class="btn btn-ghost" (click)="resetForm()">Reset</button>
+</div>
+
+@if (submittedSummary(); as summary) {
+  <div class="review-summary">
+    <div class="review-summary-row"><span class="review-summary-key">Review recorded</span><span class="review-summary-val" [class]="'status-' + summary.status">{{ summary.status === 'cleared' ? 'Cleared' : 'Escalated' }}</span></div>
+    <div class="review-summary-row"><span class="review-summary-key">Reviewer</span><span class="review-summary-val">{{ summary.reviewer }}</span></div>
+    <div class="review-summary-row"><span class="review-summary-key">Risk</span><span class="review-summary-val">{{ summary.risk }}</span></div>
+    @if (summary.notes) {
+      <div class="review-summary-row"><span class="review-summary-key">Notes</span><span class="review-summary-val">{{ summary.notes }}</span></div>
+    }
+  </div>
+}

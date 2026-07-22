@@ -1,0 +1,28 @@
+# Secrets
+.env
+**/.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Runtime SQLite state (regenerated, not source)
+contracts.db
+reviews.db
+**/reviews.db
+
+# Node / Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+
+# Claude Code harness internals
+.claude/.cc-writes/

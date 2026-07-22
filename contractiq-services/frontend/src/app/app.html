@@ -1,0 +1,15 @@
+<header>
+  <div class="logo">
+    <div class="logo-icon">📄</div>
+    ContractIQ — Review Portal
+  </div>
+  <div class="header-meta">{{ headerTime() }}</div>
+</header>
+
+<div class="layout">
+  <app-contract-queue
+    [selectedFilename]="selectedFilename()"
+    (select)="onSelect($event)"
+  />
+  <app-contract-detail [filename]="selectedFilename()" />
+</div>

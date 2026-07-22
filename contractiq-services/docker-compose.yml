@@ -1,0 +1,27 @@
+services:
+  ingestion-service:
+    build: ./ingestion-service
+    ports:
+      - "8001:8001"
+
+  rules-service:
+    build: ./rules-service
+    ports:
+      - "8002:8002"
+    environment:
+      INGESTION_SERVICE_URL: http://ingestion-service:8001
+    depends_on:
+      - ingestion-service
+
+  agent-service:
+    build: ./agent-service
+    ports:
+      - "8003:8003"
+    environment:
+      INGESTION_SERVICE_URL: http://ingestion-service:8001
+      RULES_SERVICE_URL: http://rules-service:8002
+    env_file:
+      - ./agent-service/.env
+    depends_on:
+      - ingestion-service
+      - rules-service

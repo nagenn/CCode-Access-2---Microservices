@@ -1,0 +1,43 @@
+<div class="diagram">
+  @if (inFlight() && totalSteps() === 0) {
+    <div class="node hop in-progress">
+      <div class="node-dot pulsing"></div>
+      <div class="node-body">
+        <div class="node-arrow">Agent Service</div>
+        <div class="node-text">Analyzing contract...</div>
+      </div>
+    </div>
+  }
+
+  @for (row of renderNodes(); track row.revealIndex) {
+    @if (isVisible(row.revealIndex)) {
+      <div
+        class="node"
+        [class.child]="row.isChild"
+        [class.failed]="row.node.kind === 'failed-hop'"
+        [class.annotation]="row.node.kind === 'annotation'"
+        [class.root]="row.node.kind === 'root'"
+      >
+        <div class="node-dot"></div>
+        <div class="node-body">
+          @if (row.node.kind === 'annotation') {
+            <div class="node-arrow annotation-label">⚠ Fallback</div>
+          } @else {
+            <div class="node-arrow">{{ row.from }} → {{ row.to }}</div>
+          }
+          <div class="node-text">{{ row.text }}</div>
+          <div class="node-meta">
+            {{ row.durationMs }}ms
+            @if (row.node.kind === 'failed-hop') {
+              <span class="failed-tag">FAILED</span>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  }
+
+  @if (totalSteps() === 0 && !inFlight()) {
+    <div class="placeholder">Trace will appear here once you run the agent.</div>
+  }
+</div>

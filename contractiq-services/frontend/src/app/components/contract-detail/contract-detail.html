@@ -1,0 +1,25 @@
+@if (!filename()) {
+  <div class="empty-state">
+    <div class="empty-icon">↖</div>
+    <div class="empty-text">Select a contract from the queue<br>to begin review</div>
+  </div>
+} @else {
+  <div class="detail-panel">
+    <div class="detail-header">
+      <div class="detail-filename">{{ filename() }}</div>
+      <div class="detail-vendor">{{ displayName() }}</div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab" [class.active]="activeTab() === 'manual'" (click)="setTab('manual')">Manual Review</div>
+      <div class="tab" [class.active]="activeTab() === 'agent'" (click)="setTab('agent')">Agent Review</div>
+    </div>
+
+    <div class="tab-content" [class.active]="activeTab() === 'manual'">
+      <app-manual-review [filename]="filename()!" />
+    </div>
+    <div class="tab-content" [class.active]="activeTab() === 'agent'">
+      <app-agent-review [filename]="filename()!" />
+    </div>
+  </div>
+}
