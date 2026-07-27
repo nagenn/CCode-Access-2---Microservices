@@ -166,18 +166,35 @@ status survives a page refresh instead of resetting to session-only state.
 
 ```
 contractiq-services/start.sh   # docker compose up -d --build, then docker compose ps
-contractiq-services/stop.sh    # docker compose down
+contractiq-services/stop.sh    # docker compose down, then kill anything on :4200
 ```
 
 or, from the project root, `start_all.sh` brings up the three
-microservices via the above and then runs the original monolith
-(`app.py`, port 8282) in the foreground — the two are independent apps
-that happen to share the same contract domain and PDFs, not part of the
-same system.
+microservices via the above and then runs the Angular frontend dev server
+(`npx ng serve --port 4200`, not containerized) in the foreground — this
+is the only entry point needed for the microservices system; it does not
+touch the original monolith (`app.py`) at all. CORS on all three services
+is scoped to exactly `http://localhost:4200`.
 
-Frontend dev server (not containerized): `cd contractiq-services/frontend
-&& npx ng serve --port 4200`. CORS on all three services is scoped to
-exactly `http://localhost:4200`.
+**Compose project name is pinned, not left to the default.** Both
+`start.sh` and `stop.sh` compute `COMPOSE_PROJECT_NAME=contractiq-<parent
+folder name>` (lowercased, sanitized to `[a-z0-9_-]`) right after `cd`-ing
+into their own directory, and `docker-compose.yml` reads it via `name:
+${COMPOSE_PROJECT_NAME:-contractiq}`. Without this, Compose defaults the
+project name to the parent directory's basename, so two clones of this
+repo sitting in identically-named (or just differently-named) folders can
+collide — one checkout's `up`/`down`/`ps` silently adopting or missing
+containers that belong to the other. This only fixes container-management
+collisions, not port collisions: both clones still bind fixed host ports
+(`8001`/`8002`/`8003`), so only one can run at a time regardless of
+project name.
+
+**`stop.sh` also reaps the frontend dev server.** `docker compose down`
+only tears down containers, and `ng serve` runs as a bare process outside
+Docker — invisible to Compose. `stop.sh` additionally runs `lsof -ti
+tcp:4200` and kills whatever PID(s) are bound there, so `stop.sh` is a
+complete shutdown of everything `start_all.sh` starts, not just the
+containerized half.
 
 ## Deviations from `ContractIQ_Microservices_Spec.md`
 
