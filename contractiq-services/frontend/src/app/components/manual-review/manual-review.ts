@@ -76,6 +76,7 @@ export class ManualReview {
     this.submitting.set(true);
     this.submitError.set(null);
 
+    // manual reviews have no LLM confidence — risk-only status
     const status = deriveReviewStatus(risk);
 
     try {

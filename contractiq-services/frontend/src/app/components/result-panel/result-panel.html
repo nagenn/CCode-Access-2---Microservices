@@ -55,6 +55,11 @@
   <span class="confidence-value">{{ confidencePct() }}%</span>
 </div>
 
-@if (response().risk_level === 'High') {
-  <div class="escalation-notice">⚠ This contract has been escalated for legal review. Human sign-off required before proceeding.</div>
+@if (isEscalated()) {
+  <div class="escalation-notice">
+    ⚠ This contract has been escalated for legal review. Human sign-off required before proceeding.
+    @if (isLowConfidenceEscalation()) {
+      Escalation was forced because confidence ({{ confidencePct() }}%) is below the 75% threshold, regardless of risk level.
+    }
+  </div>
 }

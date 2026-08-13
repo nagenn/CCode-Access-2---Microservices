@@ -60,7 +60,7 @@ export class AgentReview {
       await this.reviewsStore.recordReview({
         filename: this.filename(),
         review_type: 'agent',
-        status: deriveReviewStatus(res.risk_level),
+        status: deriveReviewStatus(res.risk_level, res.confidence),
         risk_level: res.risk_level,
       });
     } catch {

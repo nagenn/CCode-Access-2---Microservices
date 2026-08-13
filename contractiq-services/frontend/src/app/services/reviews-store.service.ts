@@ -3,8 +3,19 @@ import { firstValueFrom } from 'rxjs';
 import { Review, ReviewCreate, ReviewStatus } from '../models/review.model';
 import { ApiService } from './api.service';
 
-/** Low risk clears a contract; Medium/High escalates it. */
-export function deriveReviewStatus(riskLevel: string): ReviewStatus {
+/** Mirrors escalation_rules.confidence_below in compliance_rules.json. */
+export const CONFIDENCE_ESCALATION_THRESHOLD = 0.75;
+
+/**
+ * Low risk clears a contract; Medium/High escalates it. Confidence below
+ * CONFIDENCE_ESCALATION_THRESHOLD forces escalation regardless of risk —
+ * manual reviews have no LLM confidence, so pass confidence only when one
+ * actually exists.
+ */
+export function deriveReviewStatus(riskLevel: string, confidence?: number): ReviewStatus {
+  if (confidence !== undefined && confidence < CONFIDENCE_ESCALATION_THRESHOLD) {
+    return 'escalated';
+  }
   return riskLevel === 'Low' ? 'cleared' : 'escalated';
 }
 
