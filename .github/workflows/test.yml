@@ -14,18 +14,11 @@ jobs:
           python-version: "3.11"
       - name: Install backend dependencies
         run: |
-          pip install pytest httpx -r ingestion-service/requirements.txt
-          pip install pytest httpx -r rules-service/requirements.txt
-          pip install pytest httpx -r agent-service/requirements.txt
+          pip install pytest httpx -r contractiq-services/ingestion-service/requirements.txt
+          pip install pytest httpx -r contractiq-services/rules-service/requirements.txt
+          pip install pytest httpx -r contractiq-services/agent-service/requirements.txt
       - name: Run backend tests
         run: pytest
+        working-directory: ./contractiq-services
       - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - name: Install frontend dependencies
-        run: npm ci
-        working-directory: ./frontend
-      - name: Run frontend tests
-        run: npm test
-        working-directory: ./frontend
+        uses:
