@@ -21,4 +21,12 @@ jobs:
         run: pytest
         working-directory: ./contractiq-services
       - name: Set up Node
-        uses:
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: ./contractiq-services/frontend
+      - name: Run frontend tests
+        run: npm test
+        working-directory: ./contractiq-services/frontend
