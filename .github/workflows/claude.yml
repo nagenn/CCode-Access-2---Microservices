@@ -21,3 +21,5 @@ jobs:
             described there, and report using the agent's standard 
             REQUIREMENT / VERDICT / FINDINGS / WHAT WOULD SLIP THROUGH 
             structure.
+          claude_args: |
+            --permission-mode dontAsk --allowedTools "Read" "Grep" "Glob"
