@@ -17,10 +17,13 @@ jobs:
           show_full_output: true
           prompt: |
             Use the requirements-validator agent to review this PR's 
-            changes against context-map.md. Check whether any file, 
-            table, or endpoint touched here overlaps with what's 
-            described there. Post the validator's full report — 
-            REQUIREMENT / VERDICT / FINDINGS / WHAT WOULD SLIP THROUGH — 
-            as a comment on this pull request.
+            changes against context-map.md. Run it synchronously and 
+            wait for it to fully complete — do NOT run it in the 
+            background, since this job ends as soon as your turn ends. 
+            Check whether any file, table, or endpoint touched here 
+            overlaps with what's described there. Post the validator's 
+            full report — REQUIREMENT / VERDICT / FINDINGS / WHAT WOULD 
+            SLIP THROUGH — as a comment on this pull request, before 
+            finishing.
           claude_args: |
-            --permission-mode dontAsk --allowedTools "Read" "Grep" "Glob" "Agent" "Bash(gh pr view:*)" "Bash(gh pr diff:*)" "Bash(gh pr comment:*)" "Bash(find:*)" "Bash(git status:*)" "Bash(git log:*)" "Bash(git branch:*)" "Bash(git remote:*)"
+            --permission-mode dontAsk --allowedTools "Read" "Grep" "Glob" "Agent" "Bash(gh pr view:*)" "Bash(gh pr diff:*)" "Bash(gh pr comment:*)" "Bash(gh pr list:*)" "Bash(find:*)" "Bash(git status:*)" "Bash(git log:*)" "Bash(git branch:*)" "Bash(git remote:*)" "Bash(git fetch:*)"
