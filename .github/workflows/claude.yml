@@ -22,4 +22,4 @@ jobs:
             REQUIREMENT / VERDICT / FINDINGS / WHAT WOULD SLIP THROUGH 
             structure.
           claude_args: |
-            --permission-mode dontAsk --allowedTools "Read" "Grep" "Glob"
+            --permission-mode dontAsk --allowedTools "Read" "Grep" "Glob" "mcp__github_comment__update_claude_comment"
