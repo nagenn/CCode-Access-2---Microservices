@@ -23,4 +23,4 @@ jobs:
             REQUIREMENT / VERDICT / FINDINGS / WHAT WOULD SLIP THROUGH — 
             as a comment on this pull request.
           claude_args: |
-            --permission-mode bypassPermissions
+            --permission-mode dontAsk --allowedTools "Read" "Grep" "Glob" "Agent" "Bash(gh pr view:*)" "Bash(gh pr diff:*)" "Bash(gh pr comment:*)" "Bash(find:*)" "Bash(git status:*)" "Bash(git log:*)" "Bash(git branch:*)" "Bash(git remote:*)"
