@@ -18,8 +18,8 @@ jobs:
             Use the requirements-validator agent to review this PR's 
             changes against context-map.md. Check whether any file, 
             table, or endpoint touched here overlaps with what's 
-            described there, and report using the agent's standard 
-            REQUIREMENT / VERDICT / FINDINGS / WHAT WOULD SLIP THROUGH 
-            structure.
+            described there. Post the validator's full report — 
+            REQUIREMENT / VERDICT / FINDINGS / WHAT WOULD SLIP THROUGH — 
+            as a comment on this pull request.
           claude_args: |
             --permission-mode dontAsk --allowedTools "Read" "Grep" "Glob" "mcp__github_comment__update_claude_comment"
